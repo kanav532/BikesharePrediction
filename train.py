@@ -230,7 +230,7 @@ def train_DNN(X_train, X_cv, y_train, y_cv):
     model.add(Dense(5, activation = 'relu'))
     model.add(Dense(1))
     model.compile(optimizer = 'adam', loss = 'MSE', metrics = ['MSE', 'MAE'])
-    model.fit(X_train, y_train, epochs = 500, verbose = 1, validation_data = (X_cv, y_cv))
+    model.fit(X_train, y_train, epochs = EPOCHS, verbose = 1, validation_data = (X_cv, y_cv))
     plt.figure(figsize = (10, 10))
     sns.regplot(y_cv, model.predict(X_cv), marker = '+', color = 'maroon')
     plt.title('Y_test Vs Y_predictions', color = 'maroon', fontsize = 15)
@@ -259,7 +259,7 @@ def train_KNN(X_train, X_cv, y_train, y_cv):
     plt.figure(figsize = (10, 10))
     sns.regplot(y_cv, y_predict, color = 'brown')
     plt.title('Y_test Vs Y_predictions', fontsize = 15, color = 'brown')
-    plt.show()
+    plt.savefig('train.png')
 
 def train_PLSReg(X_train, X_cv, y_train, y_cv):
     n_components_list = [2, 3, 5, 7, 10]
@@ -283,7 +283,7 @@ def train_PLSReg(X_train, X_cv, y_train, y_cv):
     plt.figure(figsize = (10, 10))
     sns.regplot(y_cv, y_predict, color = 'brown')
     plt.title('Y_test Vs Y_predictions', fontsize = 15, color = 'brown')
-    plt.show()
+    plt.savefig('train.png')
 
 def train_DecisionTreeReg(X_train, X_cv, y_train, y_cv):
     max_depth_list = [10, 15, 16, 17, 18, 20, 25]
@@ -307,7 +307,7 @@ def train_DecisionTreeReg(X_train, X_cv, y_train, y_cv):
     plt.figure(figsize = (10, 10))
     sns.regplot(y_predict, y_cv, marker = '*', color = 'green')
     plt.title('Y_test Vs Y_predictions', fontsize = 15, color = 'green')
-    plt.show()
+    plt.savefig('train.png')
 
 def train_GradientBoostingReg(X_train, X_cv, y_train, y_cv):
     n_estimators_list = [25, 50, 100, 150, 200, 400, 1000]
@@ -331,7 +331,7 @@ def train_GradientBoostingReg(X_train, X_cv, y_train, y_cv):
     plt.figure(figsize = (10, 10))
     sns.regplot(y_predict, y_cv, marker = 'o', color = 'blue')
     plt.title("Y_test Vs Y_predictions", fontsize = 15, color = 'blue')
-    plt.show()
+    plt.savefig('train.png')
 
 def train_LogReg(X_train, X_cv, y_train, y_cv):
     mean_squared_error_list = []
@@ -346,14 +346,14 @@ def train_LogReg(X_train, X_cv, y_train, y_cv):
     plt.figure(figsize = (10, 10))
     sns.regplot(y_cv, y_predict, color = 'orange')
     plt.title("Y_test Vs Y_predictions", fontsize = 15, color = 'orange')
-    plt.show()
+    plt.savefig('train.png')
 
 
 if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--filepath', required=True)
-    parser.add_argument('--algorithm', type=str, required=True)
+    parser.add_argument('--algorithm', type=str, required=True,help="Choose the algorithm type amongst dnn,logreg,gbreg,dtreg,plsreg,knn")
     # parser.add_argument('--x', type=int, default=,)
     # parser.add_argument('--y', type=int, default=)  
     args = parser.parse_args()
@@ -361,8 +361,15 @@ if __name__=="__main__":
     algorithm= args.algorithm
     df= data_processing(data_file)
     X_train, X_cv, y_train, y_cv= train_ML_data(df)
-    print(algorithm)
     if algorithm=="dnn":
         train_DNN(X_train, X_cv, y_train, y_cv)
-        print("HEY")
-
+    if algorithm=="logreg":
+        train_LogReg(X_train, X_cv, y_train, y_cv)
+    if algorithm=="gbreg":
+        train_GradientBoostingReg(X_train, X_cv, y_train, y_cv)
+    if algorithm=="dtreg":
+        train_DecisionTreeReg(X_train, X_cv, y_train, y_cv)
+    if algorithm=="pslreg":
+        train_PLSReg(X_train, X_cv, y_train, y_cv)
+    if algorithm=="knn":
+        train_KNN(X_train, X_cv, y_train, y_cv)
