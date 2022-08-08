@@ -20,8 +20,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 
-warnings.filterwarnings("ignore")
-
 TRAIN_SPLIT = 8000
 SEED = 101
 past_history = 24
